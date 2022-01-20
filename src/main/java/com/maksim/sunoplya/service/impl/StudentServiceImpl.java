@@ -73,7 +73,8 @@ public class StudentServiceImpl implements StudentService {
         return csv(sortedEducationalPerformance);
     }
 
-    private Map<StudentPerformanceDto, List<DisciplinePerformanceDto>> getStudentPerformanceDtoMap(Map<Student, List<Discipline>> educationalPerformance) {
+    private Map<StudentPerformanceDto, List<DisciplinePerformanceDto>>
+    getStudentPerformanceDtoMap(Map<Student, List<Discipline>> educationalPerformance) {
         return educationalPerformance.entrySet()
                 .stream().collect(Collectors.toMap(
                         e -> studentMapper.toStudentPerformanceDto(e.getKey()),
@@ -96,6 +97,8 @@ public class StudentServiceImpl implements StudentService {
         Map<StudentPerformanceDto, List<DisciplinePerformanceDto>> sortedEducationalPerformance =
                 new TreeMap<>(Comparator.comparing(StudentPerformanceDto::getSurname));
         sortedEducationalPerformance.putAll(educationalPerformanceDto);
+
+        log.info("Educational performance for student " + surname + " requested.");
 
         return csv(sortedEducationalPerformance);
     }
