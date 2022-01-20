@@ -33,7 +33,7 @@ class StudentControllerTest {
 
     @Test
     void givenNothing_whenFindAll_thenReturnCsvReport() {
-        String report = studentService.findAll();
+        String report = studentService.report(null);
         assertNotNull(report);
     }
 
@@ -66,9 +66,9 @@ class StudentControllerTest {
     }
 
     @Test
-    void findAll() {
+    void givenNull_whenReport_thenReturnNotNullReport() {
         studentService.create(TestData.getStudentDtoActual());
-        String csvReport = studentService.findAll();
+        String csvReport = studentService.report(null);
 
         assertNotNull(csvReport);
         assertTrue(csvReport.contains(TestData.getStudentDtoActual().getSurname()));

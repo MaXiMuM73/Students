@@ -31,9 +31,8 @@ public class StudentController {
     }
 
     @GetMapping("/report")
-    public ResponseEntity<String> findAll(
+    public ResponseEntity<String> report(
             @PathParam(value = "surname") String surname) {
-        if (surname != null) return ResponseEntity.ok(studentService.findAllBySurname(surname));
-        return ResponseEntity.ok(studentService.findAll());
+        return ResponseEntity.ok(studentService.report(surname));
     }
 }

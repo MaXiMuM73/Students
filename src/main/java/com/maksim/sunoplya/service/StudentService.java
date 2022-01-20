@@ -7,9 +7,7 @@ public interface StudentService {
 
     StudentDto update(String surname, StudentDto studentDto);
 
-    String findAll();
-
-    String findAllBySurname(String surname);
+    String report(String surname);
 
     String delete(String surname);
 }

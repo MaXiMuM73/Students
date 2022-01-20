@@ -57,7 +57,15 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public String findAll() {
+    public String report(String surname) {
+        if (surname == null) {
+            return reportAll();
+        } else {
+            return reportBySurname(surname);
+        }
+    }
+
+    private String reportAll() {
         Map<Student, List<Discipline>> educationalPerformance = studentRepository.findAll();
 
         Map<StudentPerformanceDto, List<DisciplinePerformanceDto>> educationalPerformanceDto =
@@ -69,8 +77,21 @@ public class StudentServiceImpl implements StudentService {
 
         log.info("Educational performance requested.");
 
-        csv(sortedEducationalPerformance);
-        return csv(sortedEducationalPerformance);
+        return generateCsvReport(sortedEducationalPerformance);
+    }
+
+    private String reportBySurname(String surname) {
+        Map<Student, List<Discipline>> educationalPerformance = studentRepository.findAllBySurname(surname);
+
+        Map<StudentPerformanceDto, List<DisciplinePerformanceDto>> educationalPerformanceDto = getStudentPerformanceDtoMap(educationalPerformance);
+
+        Map<StudentPerformanceDto, List<DisciplinePerformanceDto>> sortedEducationalPerformance =
+                new TreeMap<>(Comparator.comparing(StudentPerformanceDto::getSurname));
+        sortedEducationalPerformance.putAll(educationalPerformanceDto);
+
+        log.info("Educational performance for student " + surname + " requested.");
+
+        return generateCsvReport(sortedEducationalPerformance);
     }
 
     private Map<StudentPerformanceDto, List<DisciplinePerformanceDto>>
@@ -88,22 +109,7 @@ public class StudentServiceImpl implements StudentService {
                 ));
     }
 
-    @Override
-    public String findAllBySurname(String surname) {
-        Map<Student, List<Discipline>> educationalPerformance = studentRepository.findAllBySurname(surname);
-
-        Map<StudentPerformanceDto, List<DisciplinePerformanceDto>> educationalPerformanceDto = getStudentPerformanceDtoMap(educationalPerformance);
-
-        Map<StudentPerformanceDto, List<DisciplinePerformanceDto>> sortedEducationalPerformance =
-                new TreeMap<>(Comparator.comparing(StudentPerformanceDto::getSurname));
-        sortedEducationalPerformance.putAll(educationalPerformanceDto);
-
-        log.info("Educational performance for student " + surname + " requested.");
-
-        return csv(sortedEducationalPerformance);
-    }
-
-    private String csv(Map<StudentPerformanceDto, List<DisciplinePerformanceDto>> sortedEducationalPerformance) {
+    private String generateCsvReport(Map<StudentPerformanceDto, List<DisciplinePerformanceDto>> sortedEducationalPerformance) {
         StringBuilder csvReport = new StringBuilder();
 
         processReport(sortedEducationalPerformance, csvReport);
