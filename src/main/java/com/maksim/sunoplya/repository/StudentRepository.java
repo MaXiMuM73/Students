@@ -1,7 +1,6 @@
 package com.maksim.sunoplya.repository;
 
 import com.maksim.sunoplya.dto.StudentDto;
-import com.maksim.sunoplya.dto.StudentPerformanceDto;
 import com.maksim.sunoplya.entity.Discipline;
 import com.maksim.sunoplya.entity.Student;
 import com.maksim.sunoplya.exception.StudentAlreadyExistsException;
